@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recipe Dataset Schema",
+  "description": "Defines the structure for the multi-country recipe dataset.",
+  "type": "object",
+  "patternProperties": {
+    "^[a-z]{2}$": {
+      "$ref": "#/definitions/countryData"
+    }
+  },
+  "definitions": {
+    "countryData": {
+      "type": "object",
+      "properties": {
+        "recipes": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z_]+$": {
+              "$ref": "#/definitions/recipe"
+            }
+          }
+        }
+      },
+      "required": ["recipes"]
+    },
+    "recipe": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "object",
+          "properties": {
+            "local": { "type": ["string", "array"] },
+            "en": { "type": "string" }
+          },
+          "required": ["local", "en"]
+        },
+        "is_nonVeg": { "type": "boolean" },
+        "total_time_seconds": { "type": "integer" },
+        "warning": { "type": ["string", "null"] },
+        "overload_info": { "type": ["string", "null"] },
+        "ingredients": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ingredient" }
+        },
+        "instructions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/instruction" }
+        },
+        "classification": {
+          "type": "object",
+          "properties": {
+            "course": { "type": "array", "items": { "type": "string" } },
+            "category": { "type": "array", "items": { "type": "string" } },
+            "meal_timing": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "regions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["name", "is_nonVeg", "total_time_seconds", "ingredients", "instructions", "classification", "regions"]
+    },
+    "ingredient": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "amount": { "type": ["number", "null"] },
+        "unit": { "type": ["string", "null"] },
+        "availability": { "type": ["string", "null"] }
+      },
+      "required": ["name"]
+    },
+    "instruction": {
+      "type": "object",
+      "properties": {
+        "step": { "type": "integer" },
+        "description": { "type": "string" },
+        "time_seconds": { "type": "integer" },
+        "is_passive": { "type": "boolean" }
+      },
+      "required": ["step", "description", "time_seconds", "is_passive"]
+    }
+  }
+}
